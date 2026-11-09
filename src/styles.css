@@ -1,0 +1,33 @@
+:root {
+  font-family: -apple-system, 'Segoe UI', system-ui, sans-serif;
+  color: #161616;
+  background: #f4f4f4;
+}
+
+body { margin: 0; }
+.dashboard { max-width: 1100px; margin: 0 auto; padding: 24px 16px; }
+.dashboard-header h1 { margin: 0; }
+.muted { color: #6f6f6f; font-weight: 400; margin: 4px 0 0; }
+
+.card { background: #fff; border: 1px solid #e0e0e0; border-radius: 4px; padding: 16px; }
+.card h2, .card h3 { margin: 0; }
+
+.quote-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; margin: 20px 0; }
+.price { font-size: 1.5rem; margin: 8px 0 4px; }
+.change.up { color: #198038; }
+.change.down { color: #da1e28; }
+
+.tabs { display: flex; gap: 4px; margin-bottom: 12px; }
+.tab { padding: 8px 16px; border: 1px solid #c6c6c6; background: #fff; cursor: pointer; }
+.tab.active { background: #0f62fe; border-color: #0f62fe; color: #fff; }
+
+.chart-card header { margin-bottom: 12px; }
+.state { padding: 24px; text-align: center; color: #6f6f6f; }
+.state-error { color: #da1e28; }
+
+.window-view { display: grid; gap: 12px; }
+.ranking { width: 100%; border-collapse: collapse; margin-top: 8px; }
+.ranking th, .ranking td { text-align: left; padding: 8px; border-bottom: 1px solid #e0e0e0; }
+.notice { margin: 0 0 12px; padding: 8px 12px; background: #fcf4d6; border-left: 3px solid #b28600; }
+.badge { display: inline-block; margin-left: 8px; padding: 2px 8px; font-size: 0.75rem; background: #fcf4d6; border: 1px solid #b28600; border-radius: 10px; }
+.state-warning { padding: 8px 12px; margin: 12px 0; background: #fff1f1; border-left: 3px solid #da1e28; }

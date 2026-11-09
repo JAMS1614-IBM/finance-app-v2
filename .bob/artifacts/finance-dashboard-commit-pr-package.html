@@ -1,0 +1,148 @@
+
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Finance Dashboard — Commit &amp; PR Package</title>
+<style>
+  body{margin:0;background:#fff;color:#1f2328;font-family:-apple-system,"Segoe UI",system-ui,sans-serif;font-size:14.5px;line-height:1.6}
+  .wrap{max-width:760px;margin:0 auto;padding:32px 20px 24px}
+  h1{font-size:22px;margin:0 0 4px}
+  h2{font-size:17px;margin:32px 0 8px;padding-top:8px;border-top:1px solid #e5e7eb}
+  h3{font-size:14.5px;margin:20px 0 6px}
+  p{margin:8px 0}
+  .muted{color:#57606a}
+  .panel{background:#f7f8fa;border:1px solid #e5e7eb;border-radius:6px;padding:12px 16px;margin:16px 0}
+  .panel strong{color:#3b82d4}
+  table{width:100%;border-collapse:collapse;margin:10px 0;font-size:13.5px}
+  th,td{text-align:left;padding:6px 10px;border:1px solid #e5e7eb;vertical-align:top}
+  th{background:#f7f8fa;font-weight:600}
+  code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12.5px;background:#f7f8fa;padding:1px 4px;border-radius:3px}
+  pre{background:#f7f8fa;border:1px solid #e5e7eb;border-radius:6px;padding:12px 14px;overflow-x:auto;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12.5px;line-height:1.5;white-space:pre-wrap;margin:10px 0}
+  ul{margin:6px 0;padding-left:20px}
+  .footer{margin-top:40px;padding-top:12px;border-top:1px solid #e5e7eb;text-align:center;font-size:12px;color:#57606a}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<h1>Finance Dashboard — Commit &amp; PR Package</h1>
+<p class="muted">Delivery artifacts for the initial publish to <code>JAMS1614-IBM/finance-app-v2</code>. Use the commit message in Step 7 and the PR description when opening the pull request.</p>
+
+<div class="panel">
+  <p><strong>Validation — live run against the code on disk</strong></p>
+  <table>
+    <tr><th>Gate</th><th>Command</th><th>Result</th></tr>
+    <tr><td>Lint</td><td><code>npm run lint</code></td><td>0 errors, 0 warnings</td></tr>
+    <tr><td>Typecheck</td><td><code>npm run typecheck</code></td><td>Clean</td></tr>
+    <tr><td>Tests</td><td><code>npm test</code></td><td>76 passed across 12 files</td></tr>
+    <tr><td>Build</td><td><code>npm run build</code></td><td>416 modules, no warnings</td></tr>
+  </table>
+  <p class="muted">Combined run: <code>npm run validate</code>. Counts depend on what Part 1 produced on your machine.</p>
+</div>
+
+<h2>1 · Implementation summary</h2>
+<p>A React 19 + TypeScript market dashboard comparing <strong>IBM</strong> against <strong>Microsoft, Oracle, SAP and Salesforce</strong>. A small Express proxy using <code>yahoo-finance2</code> isolates the browser from the third-party API. The UI can also run with sample data and no server (<code>npm run dev:mock</code>).</p>
+
+<h3>Three views</h3>
+<table>
+  <tr><th>View</th><th>What it shows</th><th>Components</th></tr>
+  <tr><td>Current Day</td><td>Latest session, percent change from the open. Shows a "Market closed" notice when data is stale.</td><td><code>TodayView</code>, <code>WindowView</code></td></tr>
+  <tr><td>Last 7 Days</td><td>Percent change from the start of the week</td><td><code>WeekView</code>, <code>WindowView</code></td></tr>
+  <tr><td>Last Quarter</td><td>Daily closes, percent change from the start of the quarter</td><td><code>QuarterView</code>, <code>WindowView</code></td></tr>
+</table>
+<p>All three share <code>WindowView</code>: a Recharts comparison line chart plus a ranking table, with loading, error and retry states.</p>
+
+<h3>Source inventory</h3>
+<table>
+  <tr><th>Layer</th><th>Files</th><th>Responsibility</th></tr>
+  <tr><td>Config</td><td><code>src/config/companies.ts</code></td><td>Single validated company list: exactly one primary, at most 5, no duplicates. Adding a company is one entry.</td></tr>
+  <tr><td>Domain</td><td><code>src/domain/</code> (<code>metrics</code>, <code>normalize</code>, <code>session</code>, <code>symbols</code>, <code>timeWindows</code>, <code>types</code>)</td><td>Pure logic: percent-change normalisation, rankings, session and stale-data detection</td></tr>
+  <tr><td>Data service</td><td><code>src/services/</code></td><td><code>MarketDataService</code> interface with HTTP and mock implementations, context provider, error mapping</td></tr>
+  <tr><td>State</td><td><code>src/hooks/</code></td><td><code>useAsync</code>, <code>useHistory</code>, <code>useQuotes</code>, <code>useTimeWindow</code></td></tr>
+  <tr><td>UI</td><td><code>src/components/</code>, <code>src/views/</code>, <code>src/pages/</code></td><td>Charts, ranking table, quote cards, feedback states, window tabs, dashboard page</td></tr>
+  <tr><td>Server</td><td><code>server/</code></td><td><code>GET /api/health</code>, <code>/api/quotes</code>, <code>/api/history</code>; input validation; in-memory TTL cache that never caches errors; Yahoo provider</td></tr>
+  <tr><td>Tests</td><td>12 test files</td><td>Unit, component render and API tests</td></tr>
+  <tr><td>Delivery</td><td><code>.github/</code></td><td>CI workflow, PR template, feature-request issue template</td></tr>
+</table>
+
+<h3>By the numbers</h3>
+<ul>
+  <li>42 files in <code>src/</code> and 10 in <code>server/</code></li>
+  <li>76 tests across 12 files</li>
+  <li>Production build: 416 modules, one ~608 kB chunk (180 kB gzip)</li>
+</ul>
+
+<h2>2 · Commit message</h2>
+<pre>feat: add initial React finance dashboard application
+
+Add a React 19 + TypeScript dashboard comparing IBM against Microsoft,
+Oracle, SAP and Salesforce, backed by an Express proxy for Yahoo Finance.
+
+- Three views: Current Day, Last 7 Days, Last Quarter (comparison line
+  chart plus ranking table, with loading/error/retry and stale-data notice)
+- Single validated company config (src/config/companies.ts)
+- Swappable data layer: HTTP service and offline mock service
+- Express API: /api/health, /api/quotes, /api/history with input
+  validation and an in-memory TTL cache
+- 76 tests across 12 files; lint, typecheck and build pass
+- CI workflow, PR template and feature-request issue template</pre>
+
+<h2>3 · Pull request description</h2>
+<p class="muted">Follows <code>.github/PULL_REQUEST_TEMPLATE.md</code>.</p>
+<pre>## Summary
+Adds the initial finance dashboard: a React 19 + TypeScript app that compares
+IBM against Microsoft, Oracle, SAP and Salesforce across three time windows,
+served by an Express proxy that isolates the browser from Yahoo Finance.
+
+## Motivation
+Establishes the baseline application for Part 2 of the IBM Bob GitHub SDLC
+lab, so later enhancements (e.g. a user-selected company chart) can be
+delivered through issues, branches and pull requests.
+
+## Change Type
+- [x] Initial application delivery
+- [ ] Dashboard enhancement
+- [ ] Data integration update
+- [x] Test / validation improvement
+- [x] GitHub workflow improvement
+
+## What's included
+- Dashboards: Current Day, Last 7 Days, Last Quarter. Each has a comparison
+  line chart (percent change) and a ranking table. A "Market closed" notice
+  appears when the day view holds stale data.
+- Data layer: MarketDataService interface with HTTP and mock implementations
+  (npm run dev:mock runs with no server).
+- Server: /api/health, /api/quotes, /api/history; symbol and window
+  validation, in-memory TTL cache (errors are not cached).
+- Config: one validated company list in src/config/companies.ts.
+- Repo plumbing: CI workflow, PR template, feature-request issue template.
+
+## Bob Collaboration Notes
+- Repository analysis: inspected the working tree and delivery readiness
+- Implementation: generated the application and tests
+- Validation: ran lint, typecheck, tests and build
+- PR description generation: this description
+
+## Validation
+npm ci
+npm run validate        # lint, typecheck, tests, build
+npm run test:coverage   # optional: enforces coverage thresholds
+
+Results: lint 0 errors, typecheck clean, 76 tests passing (12 files),
+build OK (416 modules).
+
+## Feature Request Alignment
+N/A. This is the baseline delivery. The next issue ("Add a graph for a user
+selected company") builds on it.
+
+## Risks / Follow-Up
+- Relies on Yahoo Finance via yahoo-finance2, an unofficial API that may be
+  rate-limited or change.
+- Production bundle is a single ~608 kB chunk (180 kB gzip). Code splitting
+  is a possible follow-up.
+- No user-selected company graph yet (next lab module).</pre>
+
+<div class="footer">Made with IBM Bob</div>
+</div>
+</body>
+</html>
