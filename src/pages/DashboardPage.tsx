@@ -1,3 +1,4 @@
+import { CustomCompanyPanel } from '../components/custom/CustomCompanyPanel';
 import { WindowTabs } from '../components/layout/WindowTabs';
 import { QuoteGrid } from '../components/summary/QuoteGrid';
 import { useTimeWindow } from '../hooks/useTimeWindow';
@@ -22,6 +23,8 @@ export function DashboardPage() {
       {window === 'day' && <TodayView />}
       {window === '7d' && <WeekView />}
       {window === 'quarter' && <QuarterView />}
+
+      <CustomCompanyPanel window={window} />
     </main>
   );
 }

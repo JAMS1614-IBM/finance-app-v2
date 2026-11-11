@@ -31,3 +31,9 @@ body { margin: 0; }
 .notice { margin: 0 0 12px; padding: 8px 12px; background: #fcf4d6; border-left: 3px solid #b28600; }
 .badge { display: inline-block; margin-left: 8px; padding: 2px 8px; font-size: 0.75rem; background: #fcf4d6; border: 1px solid #b28600; border-radius: 10px; }
 .state-warning { padding: 8px 12px; margin: 12px 0; background: #fff1f1; border-left: 3px solid #da1e28; }
+
+.custom-company { display: grid; gap: 12px; margin-top: 24px; }
+.custom-company-form { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin-top: 12px; }
+.custom-company-form input { padding: 8px; border: 1px solid #c6c6c6; border-radius: 2px; text-transform: uppercase; }
+.custom-company-form button { padding: 8px 16px; border: 1px solid #c6c6c6; background: #fff; cursor: pointer; }
+.field-error { margin: 8px 0 0; color: #da1e28; }
