@@ -1,3 +1,4 @@
+import { SYMBOLS } from '../config/companies';
 import { SYMBOL_PATTERN } from '../domain/symbols';
 import type { PricePoint, Quote, Series, TimeWindow } from '../domain/types';
 import { MarketDataError } from './errors';
@@ -53,19 +54,34 @@ function assertValid(symbols: string[]): void {
   }
 }
 
+/** Symbols the mock has sample data for: the tracked companies plus one extra for the custom-company chart. */
+const KNOWN_SYMBOLS = new Set([...SYMBOLS, 'NVDA']);
+
+/** Mirrors the real provider: well-formed but unknown symbols have no data. */
+function noData(symbols: string[]): MarketDataError {
+  return new MarketDataError('INVALID_SYMBOL', `No data found for: ${symbols.join(', ')}`);
+}
+
 /** Deterministic sample data. Used for the default app, tests, and offline demos. */
 export function createMockMarketDataService(now: () => number = () => Date.now()): MarketDataService {
   return {
+    /** Partial success like the real provider: unknown symbols come back empty; throws only if all are unknown. */
     async getHistory(symbols, window): Promise<Series[]> {
       assertValid(symbols);
+      if (!symbols.some((s) => KNOWN_SYMBOLS.has(s))) throw noData(symbols);
       const end = now();
-      return symbols.map((symbol) => ({ symbol, points: buildPoints(symbol, window, end) }));
+      return symbols.map((symbol) => ({
+        symbol,
+        points: KNOWN_SYMBOLS.has(symbol) ? buildPoints(symbol, window, end) : [],
+      }));
     },
 
     async getQuotes(symbols): Promise<Quote[]> {
       assertValid(symbols);
+      const known = symbols.filter((s) => KNOWN_SYMBOLS.has(s));
+      if (known.length === 0) throw noData(symbols);
       const end = now();
-      return symbols.map((symbol) => {
+      return known.map((symbol) => {
         const points = buildPoints(symbol, 'day', end);
         const open = points[0].price;
         const price = points[points.length - 1].price;
